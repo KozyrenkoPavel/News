@@ -1,35 +1,50 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import { addNews, deleteNews, getNews } from './api/newsApi';
+import { TNew } from './types/typesNews';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [state, setState] = useState<TNew[]>([]);
+
+  const fetchGetNews = async () => {
+    try {
+      const response = await getNews();
+
+      console.log(response, 'res');
+
+      if (response) setState(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const createNews = () => {
+    const data = {
+      title: 'новость 1',
+      description: 'описание новости 1',
+      image: 'https://www.interfax.ru/ftproot/textphotos/2025/03/28/pk700.jpg',
+      link: 'https://www.interfax.ru/russia/1017077',
+    };
+
+    addNews(data);
+    fetchGetNews();
+  };
+
+  const clearNews = () => {
+    // deleteNews('');
+    // fetchGetNews();
+  };
+
+  useEffect(() => {
+    fetchGetNews();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={createNews}>click</button>
+      <button onClick={clearNews}>Удалить</button>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
