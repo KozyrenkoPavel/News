@@ -26,7 +26,7 @@ function AddNews() {
       link,
     };
 
-    addNews(dataNews);
+    if (link.includes('https')) addNews(dataNews);
 
     setTitle('');
     setDescription('');
