@@ -1,19 +1,31 @@
 import { deleteNews } from '../api/newsApi';
 import { useAppDispatch } from '../store';
-import { fetchGetNews } from '../store/newsSlice';
+import {
+  fetchGetNews,
+  setIsOpenAddNews,
+  setIsOpenChangeNews,
+} from '../store/newsSlice';
 import { TNews } from '../types/typesNews';
 
 type TProps = {
   news: TNews;
+  updateNewsCard: (news: TNews) => void;
 };
 
-function News({ news }: TProps) {
+function News({ news, updateNewsCard }: TProps) {
   const dispatch = useAppDispatch();
 
   const deleteCardNews = (id: string) => {
     deleteNews(id);
 
     dispatch(fetchGetNews());
+  };
+
+  const changeStyleDisplayChangeNews = () => {
+    dispatch(setIsOpenChangeNews(true));
+    dispatch(setIsOpenAddNews(false));
+
+    updateNewsCard(news);
   };
 
   return (
@@ -28,6 +40,7 @@ function News({ news }: TProps) {
         <button onClick={() => news?._id && deleteCardNews(news._id)}>
           Удалить
         </button>
+        <button onClick={changeStyleDisplayChangeNews}>Редактировать</button>
       </div>
     </div>
   );

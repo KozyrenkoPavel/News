@@ -5,17 +5,21 @@ import { RootState } from '.';
 
 export type TInitialState = {
   news: TNews[];
-  styleAddedNewsDisplay: { display: string };
+  isOpenAddNews: boolean;
+  isOpenChangeNews: boolean;
 };
 
 const initialState: TInitialState = {
   news: [],
-  styleAddedNewsDisplay: { display: 'none' },
+  isOpenAddNews: false,
+  isOpenChangeNews: false,
 };
 
 export const selectNewsList = (state: RootState) => state.storeNews.news;
-export const selectStyleAddedNewsDisplay = (state: RootState) =>
-  state.storeNews.styleAddedNewsDisplay;
+export const selectIsOpenAddNews = (state: RootState) =>
+  state.storeNews.isOpenAddNews;
+export const selectIsOpenChangeNews = (state: RootState) =>
+  state.storeNews.isOpenChangeNews;
 
 export const fetchGetNews = createAsyncThunk(
   'newsList/fetchGetNews',
@@ -30,8 +34,11 @@ const newsSlice = createSlice({
   name: 'news',
   initialState: initialState,
   reducers: {
-    setStyleAddedNewsDisplay: (state, action) => {
-      state.styleAddedNewsDisplay = action.payload;
+    setIsOpenAddNews: (state, action) => {
+      state.isOpenAddNews = action.payload;
+    },
+    setIsOpenChangeNews: (state, action) => {
+      state.isOpenChangeNews = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -41,6 +48,6 @@ const newsSlice = createSlice({
   },
 });
 
-export const { setStyleAddedNewsDisplay } = newsSlice.actions;
+export const { setIsOpenAddNews, setIsOpenChangeNews } = newsSlice.actions;
 
 export default newsSlice.reducer;

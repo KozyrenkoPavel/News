@@ -1,28 +1,40 @@
 import {
   fetchGetNews,
+  selectIsOpenAddNews,
+  selectIsOpenChangeNews,
   selectNewsList,
-  selectStyleAddedNewsDisplay,
-  setStyleAddedNewsDisplay,
+  setIsOpenAddNews,
+  setIsOpenChangeNews,
 } from '../store/newsSlice';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store';
 import { TNews } from '../types/typesNews';
 import News from './News';
-import AddNews from './AddNews';
+import CardChangeNews from './CardChangeNews';
 
 function NewsList() {
   const news = useAppSelector(selectNewsList);
-  const addedNewsDisplay = useAppSelector(selectStyleAddedNewsDisplay).display;
+  const [updateNews, setUpdateNews] = useState<TNews>({
+    title: '',
+    description: '',
+    image: '',
+    link: '',
+  });
+  const isOpenAddNews = useAppSelector(selectIsOpenAddNews);
+  const isOpenChangeNews = useAppSelector(selectIsOpenChangeNews);
+
   const [text, setText] = useState('');
 
   const dispatch = useAppDispatch();
 
   const changeStyleDisplayAddedNews = () => {
-    if (addedNewsDisplay === 'none') {
-      dispatch(setStyleAddedNewsDisplay({ display: 'block' }));
-    } else if (addedNewsDisplay === 'block') {
-      dispatch(setStyleAddedNewsDisplay({ display: 'none' }));
-    }
+    dispatch(setIsOpenAddNews(true));
+    dispatch(setIsOpenChangeNews(false));
+    // dispatch(setStyleNewsDisplay({ display: 'block' }));
+  };
+
+  const updateNewsCard = (news: TNews) => {
+    setUpdateNews(news);
   };
 
   useEffect(() => {
@@ -44,18 +56,12 @@ function NewsList() {
         </button>
       </div>
 
-      <AddNews />
-
-      {/* <form>
-        <label>
-          Добавть новость
-          <input />
-        </label>
-      </form> */}
+      {isOpenAddNews && <CardChangeNews />}
+      {isOpenChangeNews && <CardChangeNews news={updateNews} />}
 
       {news.length ? (
         news.map((news: TNews, index: number) => (
-          <News key={index} news={news} />
+          <News key={index} news={news} updateNewsCard={updateNewsCard} />
         ))
       ) : (
         <p>В данный момент новстей нет</p>

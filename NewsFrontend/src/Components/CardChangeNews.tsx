@@ -1,22 +1,29 @@
-import { useState } from 'react';
-import { addNews } from '../api/newsApi';
+import { useEffect, useState } from 'react';
+import { addNews, updateNews } from '../api/newsApi';
 import { TNews } from '../types/typesNews';
 import { useAppDispatch, useAppSelector } from '../store';
 import {
   fetchGetNews,
-  selectStyleAddedNewsDisplay,
-  setStyleAddedNewsDisplay,
+  selectIsOpenAddNews,
+  selectIsOpenChangeNews,
+  setIsOpenAddNews,
+  setIsOpenChangeNews,
 } from '../store/newsSlice';
 
-function AddNews() {
+type TPops = {
+  news?: TNews;
+};
+
+function CardChangeNews({ news }: TPops) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [link, setLink] = useState('');
 
-  const styleAddedNewsDisplay = useAppSelector(selectStyleAddedNewsDisplay);
-
   const dispatch = useAppDispatch();
+
+  const isOpenAddNews = useAppSelector(selectIsOpenAddNews);
+  const isOpenChangeNews = useAppSelector(selectIsOpenChangeNews);
 
   const createNews = (): void => {
     const dataNews: TNews = {
@@ -28,25 +35,49 @@ function AddNews() {
 
     if (link.includes('https')) addNews(dataNews);
 
+    dispatch(fetchGetNews());
+
     setTitle('');
     setDescription('');
     setImage('');
     setLink('');
-
-    dispatch(fetchGetNews());
   };
 
-  const changeStyleDisplayAddedNews = () => {
-    if (styleAddedNewsDisplay.display === 'none') {
-      dispatch(setStyleAddedNewsDisplay({ display: 'block' }));
-    } else if (styleAddedNewsDisplay.display === 'block') {
-      dispatch(setStyleAddedNewsDisplay({ display: 'none' }));
+  const changeNews = (): void => {
+    if (news?._id) {
+      const dataNews = { title, description, image, link };
+
+      updateNews(news._id, dataNews);
+
+      dispatch(fetchGetNews());
+
+      setTitle('');
+      setDescription('');
+      setImage('');
+      setLink('');
+
+      dispatch(setIsOpenChangeNews(false));
     }
   };
 
+  const changeStyleDisplayAddedNews = () => {
+    dispatch(setIsOpenAddNews(false));
+    dispatch(setIsOpenChangeNews(false));
+  };
+
+  useEffect(() => {
+    if (news?._id) {
+      setTitle(news?.title);
+      setDescription(news?.description);
+      setImage(news?.image);
+      setLink(news?.link);
+    }
+  }, [news]);
+
   return (
-    <div className="addNews" style={styleAddedNewsDisplay}>
-      <header>Публикация новости</header>
+    <div className="addNews">
+      {isOpenAddNews && <header>Публикация новости</header>}
+      {isOpenChangeNews && <header>Редактирование новости</header>}
 
       <form className="contentNews">
         <label>
@@ -81,11 +112,14 @@ function AddNews() {
             placeholder="ВВедите ссылку на вашу новость "
           />
         </label>
-        <button onClick={createNews}>Опубликовать</button>
+        {isOpenAddNews && <button onClick={createNews}>Опубликовать</button>}
+        {isOpenChangeNews && (
+          <button onClick={changeNews}>Изменить содержимое</button>
+        )}
       </form>
       <button onClick={changeStyleDisplayAddedNews}>Закрыть</button>
     </div>
   );
 }
 
-export default AddNews;
+export default CardChangeNews;
