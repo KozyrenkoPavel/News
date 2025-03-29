@@ -13,6 +13,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import newsReducer from './newsSlice';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 const rootReducer = combineReducers({
   storeNews: newsReducer,
@@ -23,12 +24,14 @@ const persistConfig = {
   storage,
 };
 
+export type RootState = ReturnType<typeof rootReducer>;
+export type AppStore = typeof store;
+export type AppDispatch = AppStore['dispatch'];
+
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
-  reducer: {
-    storeNews: persistedReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -36,6 +39,9 @@ const store = configureStore({
       },
     }),
 });
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const persistor = persistStore(store);
 export default store;
