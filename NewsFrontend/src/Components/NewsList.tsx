@@ -14,6 +14,7 @@ import CardChangeNews from './CardChangeNews';
 
 function NewsList() {
   const news = useAppSelector(selectNewsList);
+  const [searchNews, setSearchNews] = useState<TNews[]>(news);
   const [updateNews, setUpdateNews] = useState<TNews>({
     title: '',
     description: '',
@@ -30,11 +31,35 @@ function NewsList() {
   const changeStyleDisplayAddedNews = () => {
     dispatch(setIsOpenAddNews(true));
     dispatch(setIsOpenChangeNews(false));
-    // dispatch(setStyleNewsDisplay({ display: 'block' }));
   };
 
   const updateNewsCard = (news: TNews) => {
     setUpdateNews(news);
+  };
+
+  const searchNewsByText = (text: string): void => {
+    const filterNews = news.filter((item: TNews) => {
+      const convertedText = text.toLowerCase().replace(/\s+/g, '').trim();
+
+      const convertedTitle = item.title
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .trim();
+
+      const convertedDescription = item.description
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .trim();
+
+      const condition =
+        convertedTitle.includes(convertedText) ||
+        convertedDescription.includes(convertedText);
+
+      return condition;
+    });
+
+    setSearchNews(filterNews);
+    setText('');
   };
 
   useEffect(() => {
@@ -50,7 +75,15 @@ function NewsList() {
           onChange={(e) => setText(e.target.value)}
           type="text"
         />
-        <button>Поиск</button>
+        <button onClick={() => searchNewsByText(text)}>Поиск</button>
+        <button
+          onClick={() => {
+            setText('');
+            searchNewsByText(text);
+          }}
+        >
+          Сбросить
+        </button>
         <button onClick={changeStyleDisplayAddedNews}>
           Опубликовать новую новость
         </button>
@@ -59,8 +92,8 @@ function NewsList() {
       {isOpenAddNews && <CardChangeNews />}
       {isOpenChangeNews && <CardChangeNews news={updateNews} />}
 
-      {news.length ? (
-        news.map((news: TNews, index: number) => (
+      {searchNews.length ? (
+        searchNews.map((news: TNews, index: number) => (
           <News key={index} news={news} updateNewsCard={updateNewsCard} />
         ))
       ) : (
