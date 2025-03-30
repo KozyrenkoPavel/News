@@ -11,10 +11,12 @@ import { useAppDispatch, useAppSelector } from '../store';
 import { TNews } from '../types/typesNews';
 import News from './News';
 import CardChangeNews from './CardChangeNews';
+import './NewsList.css';
 
 function NewsList() {
   const news = useAppSelector(selectNewsList);
   const [searchNews, setSearchNews] = useState<TNews[]>(news);
+  const [text, setText] = useState('');
   const [updateNews, setUpdateNews] = useState<TNews>({
     title: '',
     description: '',
@@ -23,8 +25,6 @@ function NewsList() {
   });
   const isOpenAddNews = useAppSelector(selectIsOpenAddNews);
   const isOpenChangeNews = useAppSelector(selectIsOpenChangeNews);
-
-  const [text, setText] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -67,30 +67,42 @@ function NewsList() {
   }, [dispatch]);
 
   return (
-    <div className="newsList__container">
-      <header>Список Новостей</header>
-      <div className="search">
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          type="text"
+    <div className="news-list">
+      <header className="news-list__header">
+        <img
+          className="news-list__logo"
+          src="https://img.icons8.com/?size=80&id=BuVxe5L6HlCc&format=png"
         />
-        <button onClick={() => searchNewsByText(text)}>Поиск</button>
-        <button
-          onClick={() => {
-            setText('');
-            searchNewsByText(text);
-          }}
-        >
-          Сбросить
-        </button>
-        <button onClick={changeStyleDisplayAddedNews}>
-          Опубликовать новую новость
-        </button>
-      </div>
+        Список Новостей
+      </header>
+      <nav className="news-list__nav">
+        <div className="news-list__nav--search">
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            type="text"
+          />
+          <button onClick={() => searchNewsByText(text)}>Поиск</button>
+          <button
+            onClick={() => {
+              setText('');
+              searchNewsByText(text);
+            }}
+          >
+            Сбросить
+          </button>
+        </div>
+        <div className="news-list__nav--create-news">
+          <button onClick={changeStyleDisplayAddedNews}>
+            Опубликовать новую новость
+          </button>
+        </div>
+      </nav>
 
       {isOpenAddNews && <CardChangeNews />}
-      {isOpenChangeNews && <CardChangeNews news={updateNews} />}
+      {isOpenChangeNews && (
+        <CardChangeNews news={updateNews} setSearchNews={setSearchNews} />
+      )}
 
       {searchNews.length ? (
         searchNews.map((news: TNews, index: number) => (

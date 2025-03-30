@@ -6,15 +6,19 @@ import {
   fetchGetNews,
   selectIsOpenAddNews,
   selectIsOpenChangeNews,
+  selectNewsList,
   setIsOpenAddNews,
   setIsOpenChangeNews,
 } from '../store/newsSlice';
+import './CardChangeNews.css';
 
 type TPops = {
   news?: TNews;
+  setSearchNews?: (news: TNews) => void;
 };
 
-function CardChangeNews({ news }: TPops) {
+function CardChangeNews({ news, setSearchNews }: TPops) {
+  const newsUpdate = useAppSelector(selectNewsList);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
@@ -49,14 +53,17 @@ function CardChangeNews({ news }: TPops) {
 
       updateNews(news._id, dataNews);
 
-      dispatch(fetchGetNews());
-
       setTitle('');
       setDescription('');
       setImage('');
       setLink('');
 
       dispatch(setIsOpenChangeNews(false));
+      dispatch(setIsOpenAddNews(false));
+
+      dispatch(fetchGetNews());
+
+      // setSearchNews(newsUpdate);
     }
   };
 
@@ -75,13 +82,13 @@ function CardChangeNews({ news }: TPops) {
   }, [news]);
 
   return (
-    <div className="addNews">
+    <div className="change-card">
       {isOpenAddNews && <header>Публикация новости</header>}
       {isOpenChangeNews && <header>Редактирование новости</header>}
 
-      <form className="contentNews">
+      <div className="change-card__content">
         <label>
-          Заголовок
+          <p>Заголовок</p>
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -89,7 +96,7 @@ function CardChangeNews({ news }: TPops) {
           />
         </label>
         <label>
-          Описание
+          <p>Описание</p>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -97,7 +104,7 @@ function CardChangeNews({ news }: TPops) {
           />
         </label>
         <label>
-          Изображение
+          <p>Изображение</p>
           <input
             value={image}
             onChange={(e) => setImage(e.target.value)}
@@ -105,19 +112,21 @@ function CardChangeNews({ news }: TPops) {
           />
         </label>
         <label>
-          Ссылка на новость
+          <p>Ссылка на новость</p>
           <input
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            placeholder="ВВедите ссылку на вашу новость "
+            placeholder="Введите ссылку на вашу новость "
           />
         </label>
+      </div>
+      <div className="change-card__buttons">
         {isOpenAddNews && <button onClick={createNews}>Опубликовать</button>}
         {isOpenChangeNews && (
           <button onClick={changeNews}>Изменить содержимое</button>
         )}
-      </form>
-      <button onClick={changeStyleDisplayAddedNews}>Закрыть</button>
+        <button onClick={changeStyleDisplayAddedNews}>Закрыть</button>
+      </div>
     </div>
   );
 }
