@@ -3,26 +3,27 @@ import {
   selectIsOpenAddNews,
   selectIsOpenChangeNews,
   selectNewsList,
+  setFilterNewsList,
   setIsOpenAddNews,
   setIsOpenChangeNews,
-} from '../store/newsSlice';
-import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../store';
-import { TNews } from '../types/typesNews';
-import News from './News';
-import CardChangeNews from './CardChangeNews';
-import './NewsList.css';
+} from "../store/newsSlice";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../store";
+import { TNews } from "../types/typesNews";
+import News from "./News";
+import CardChangeNews from "./CardChangeNews";
+import "./NewsList.css";
 
 function NewsList() {
   const news = useAppSelector(selectNewsList);
-  const [searchNews, setSearchNews] = useState<TNews[]>(news);
-  const [text, setText] = useState('');
   const [updateNews, setUpdateNews] = useState<TNews>({
-    title: '',
-    description: '',
-    image: '',
-    link: '',
+    title: "",
+    description: "",
+    image: "",
+    link: "",
   });
+  const [text, setText] = useState("");
+
   const isOpenAddNews = useAppSelector(selectIsOpenAddNews);
   const isOpenChangeNews = useAppSelector(selectIsOpenChangeNews);
 
@@ -37,34 +38,32 @@ function NewsList() {
     setUpdateNews(news);
   };
 
-  const searchNewsByText = (text: string): void => {
-    const filterNews = news.filter((item: TNews) => {
-      const convertedText = text.toLowerCase().replace(/\s+/g, '').trim();
+  const searchNewsByText = (text: string): TNews[] => {
+    const convertedText = text.toLowerCase().replace(/\s+/g, "").trim();
 
+    return news.filter((item: TNews) => {
       const convertedTitle = item.title
         .toLowerCase()
-        .replace(/\s+/g, '')
+        .replace(/\s+/g, "")
         .trim();
 
       const convertedDescription = item.description
         .toLowerCase()
-        .replace(/\s+/g, '')
+        .replace(/\s+/g, "")
         .trim();
 
-      const condition =
+      return (
         convertedTitle.includes(convertedText) ||
-        convertedDescription.includes(convertedText);
-
-      return condition;
+        convertedDescription.includes(convertedText)
+      );
     });
-
-    setSearchNews(filterNews);
-    setText('');
   };
 
   useEffect(() => {
     dispatch(fetchGetNews());
   }, [dispatch]);
+
+  const filteredNews = searchNewsByText(text);
 
   return (
     <div className="news-list">
@@ -81,12 +80,12 @@ function NewsList() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             type="text"
+            placeholder="Поиск"
           />
-          <button onClick={() => searchNewsByText(text)}>Поиск</button>
+
           <button
             onClick={() => {
-              setText('');
-              searchNewsByText(text);
+              setText("");
             }}
           >
             Сбросить
@@ -100,12 +99,10 @@ function NewsList() {
       </nav>
 
       {isOpenAddNews && <CardChangeNews />}
-      {isOpenChangeNews && (
-        <CardChangeNews news={updateNews} setSearchNews={setSearchNews} />
-      )}
+      {isOpenChangeNews && <CardChangeNews news={updateNews} />}
 
-      {searchNews.length ? (
-        searchNews.map((news: TNews, index: number) => (
+      {filteredNews.length ? (
+        filteredNews.map((news: TNews, index: number) => (
           <News key={index} news={news} updateNewsCard={updateNewsCard} />
         ))
       ) : (

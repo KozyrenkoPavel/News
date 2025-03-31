@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TNews } from '../types/typesNews';
-import { getNews } from '../api/newsApi';
-import { RootState } from '.';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { TNews } from "../types/typesNews";
+import { getNews } from "../api/newsApi";
+import { RootState } from ".";
 
 export type TInitialState = {
   news: TNews[];
@@ -22,7 +22,7 @@ export const selectIsOpenChangeNews = (state: RootState) =>
   state.storeNews.isOpenChangeNews;
 
 export const fetchGetNews = createAsyncThunk(
-  'newsList/fetchGetNews',
+  "newsList/fetchGetNews",
   async () => {
     const response = await getNews();
 
@@ -31,7 +31,7 @@ export const fetchGetNews = createAsyncThunk(
 );
 
 const newsSlice = createSlice({
-  name: 'news',
+  name: "news",
   initialState: initialState,
   reducers: {
     setIsOpenAddNews: (state, action) => {
@@ -39,6 +39,9 @@ const newsSlice = createSlice({
     },
     setIsOpenChangeNews: (state, action) => {
       state.isOpenChangeNews = action.payload;
+    },
+    setFilterNewsList: (state, action) => {
+      state.news = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -48,6 +51,7 @@ const newsSlice = createSlice({
   },
 });
 
-export const { setIsOpenAddNews, setIsOpenChangeNews } = newsSlice.actions;
+export const { setIsOpenAddNews, setIsOpenChangeNews, setFilterNewsList } =
+  newsSlice.actions;
 
 export default newsSlice.reducer;

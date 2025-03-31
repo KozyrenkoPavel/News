@@ -1,35 +1,32 @@
-import { useEffect, useState } from 'react';
-import { addNews, updateNews } from '../api/newsApi';
-import { TNews } from '../types/typesNews';
-import { useAppDispatch, useAppSelector } from '../store';
+import { useEffect, useState } from "react";
+import { addNews, updateNews } from "../api/newsApi";
+import { TNews } from "../types/typesNews";
+import { useAppDispatch, useAppSelector } from "../store";
 import {
   fetchGetNews,
   selectIsOpenAddNews,
   selectIsOpenChangeNews,
-  selectNewsList,
   setIsOpenAddNews,
   setIsOpenChangeNews,
-} from '../store/newsSlice';
-import './CardChangeNews.css';
+} from "../store/newsSlice";
+import "./CardChangeNews.css";
 
 type TPops = {
   news?: TNews;
-  setSearchNews?: (news: TNews) => void;
 };
 
-function CardChangeNews({ news, setSearchNews }: TPops) {
-  const newsUpdate = useAppSelector(selectNewsList);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
-  const [link, setLink] = useState('');
+function CardChangeNews({ news }: TPops) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [link, setLink] = useState("");
 
   const dispatch = useAppDispatch();
 
   const isOpenAddNews = useAppSelector(selectIsOpenAddNews);
   const isOpenChangeNews = useAppSelector(selectIsOpenChangeNews);
 
-  const createNews = (): void => {
+  const createNews = async (): Promise<void> => {
     const dataNews: TNews = {
       title,
       description,
@@ -37,33 +34,21 @@ function CardChangeNews({ news, setSearchNews }: TPops) {
       link,
     };
 
-    if (link.includes('https')) addNews(dataNews);
+    if (link.includes("https")) await addNews(dataNews);
 
     dispatch(fetchGetNews());
-
-    setTitle('');
-    setDescription('');
-    setImage('');
-    setLink('');
+    dispatch(setIsOpenAddNews(false));
   };
 
-  const changeNews = (): void => {
+  const changeNews = async (): Promise<void> => {
     if (news?._id) {
       const dataNews = { title, description, image, link };
 
-      updateNews(news._id, dataNews);
-
-      setTitle('');
-      setDescription('');
-      setImage('');
-      setLink('');
-
-      dispatch(setIsOpenChangeNews(false));
-      dispatch(setIsOpenAddNews(false));
+      await updateNews(news._id, dataNews);
 
       dispatch(fetchGetNews());
 
-      // setSearchNews(newsUpdate);
+      dispatch(setIsOpenChangeNews(false));
     }
   };
 
@@ -79,7 +64,7 @@ function CardChangeNews({ news, setSearchNews }: TPops) {
       setImage(news?.image);
       setLink(news?.link);
     }
-  }, [news]);
+  }, []);
 
   return (
     <div className="change-card">
