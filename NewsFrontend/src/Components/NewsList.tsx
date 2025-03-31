@@ -3,7 +3,6 @@ import {
   selectIsOpenAddNews,
   selectIsOpenChangeNews,
   selectNewsList,
-  setFilterNewsList,
   setIsOpenAddNews,
   setIsOpenChangeNews,
 } from "../store/newsSlice";

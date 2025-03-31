@@ -40,9 +40,6 @@ const newsSlice = createSlice({
     setIsOpenChangeNews: (state, action) => {
       state.isOpenChangeNews = action.payload;
     },
-    setFilterNewsList: (state, action) => {
-      state.news = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchGetNews.fulfilled, (state, action) => {
@@ -51,7 +48,6 @@ const newsSlice = createSlice({
   },
 });
 
-export const { setIsOpenAddNews, setIsOpenChangeNews, setFilterNewsList } =
-  newsSlice.actions;
+export const { setIsOpenAddNews, setIsOpenChangeNews } = newsSlice.actions;
 
 export default newsSlice.reducer;

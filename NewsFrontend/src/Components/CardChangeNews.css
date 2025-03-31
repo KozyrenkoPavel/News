@@ -50,7 +50,6 @@ textarea {
 }
 
 textarea {
-  /* overflow: hidden; */
   resize: none;
 }
 
@@ -76,9 +75,30 @@ textarea:focus {
   font-size: 14px;
   cursor: pointer;
   background-color: #f1eeee;
+  color: rgb(112, 110, 110);
 }
 
 .change-card__buttons button:hover {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 120, 215, 0.5);
+}
+
+@media (max-width: 1280px) {
+  .change-card {
+    left: 22.5%;
+    height: 500px;
+  }
+
+  .change-card header {
+    font-size: 22px;
+  }
+
+  .change-card__buttons {
+    height: 40px;
+  }
+
+  .change-card__buttons button {
+    font-size: 18px;
+    height: 100%;
+  }
 }
