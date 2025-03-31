@@ -1,12 +1,13 @@
-import { deleteNews } from "../api/newsApi";
-import { useAppDispatch } from "../store";
+import { deleteNews } from '../api/newsApi';
+import { useAppDispatch } from '../store';
 import {
   fetchGetNews,
   setIsOpenAddNews,
   setIsOpenChangeNews,
-} from "../store/newsSlice";
-import { TNews } from "../types/typesNews";
-import "./News.css";
+} from '../store/newsSlice';
+import { TNews } from '../types/typesNews';
+import { useMediaQuery } from 'react-responsive';
+import './News.css';
 
 type TProps = {
   news: TNews;
@@ -15,6 +16,7 @@ type TProps = {
 
 function News({ news, updateNewsCard }: TProps) {
   const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
 
   const deleteCardNews = async (id: string): Promise<void> => {
     await deleteNews(id);
@@ -34,8 +36,8 @@ function News({ news, updateNewsCard }: TProps) {
       <h3>{news?.title}</h3>
 
       <div className="card-news__content">
-        {news?.image.includes("https") && <img src={news?.image} />}
-        <p>{news?.description.slice(0, 291) + "..."}</p>
+        {news?.image.includes('https') && <img src={news?.image} />}
+        {!isMobile && <p>{news?.description.slice(0, 260) + '...'}</p>}
       </div>
 
       <div className="card-news__buttons">

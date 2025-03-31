@@ -2,8 +2,9 @@
   width: 600px;
   height: 430px;
   position: fixed;
-  top: 20%;
-  left: 33.5%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #f1eeee;
   border: 1px solid #6d67674f;
   border-radius: 10px;
@@ -34,13 +35,13 @@
 }
 
 .change-card__content label p {
-  width: 34%;
-  font-size: 19px;
+  width: 26%;
+  font-size: 18px;
 }
 
 .change-card__content label input,
 textarea {
-  width: 60%;
+  width: 70%;
   height: 100%;
   border-radius: 10px;
   border: 1px solid rgb(211, 208, 208);
@@ -85,20 +86,85 @@ textarea:focus {
 
 @media (max-width: 1280px) {
   .change-card {
-    left: 22.5%;
-    height: 500px;
+    height: 271px;
   }
 
-  .change-card header {
-    font-size: 22px;
+  .change-card__content {
+    height: 64%;
   }
 
-  .change-card__buttons {
-    height: 40px;
+  .change-card__content label {
+    height: 23%;
+  }
+
+  .change-card__content label p {
+    font-size: 15px;
   }
 
   .change-card__buttons button {
-    font-size: 18px;
+    font-size: 15px;
     height: 100%;
+  }
+}
+
+@media (max-width: 776px) {
+  .change-card {
+    width: 280px;
+    height: 315px;
+  }
+
+  .change-card header {
+    font-size: 14px;
+    padding: 0px;
+    margin: 0;
+  }
+
+  .change-card__content {
+    width: 260px;
+    height: 57%;
+    display: block;
+  }
+
+  .change-card__content label {
+    display: block;
+    height: 33%;
+  }
+
+  .change-card__content label p,
+  input {
+    width: 100%;
+    font-size: 10px;
+  }
+
+  .change-card__content label input {
+    height: 55%;
+    width: 100%;
+  }
+
+  .change-card__content label input::placeholder {
+    font-size: 8px;
+  }
+
+  .change-card__content label textarea {
+    height: 55%;
+    width: 100%;
+  }
+
+  .change-card__content label textarea::placeholder {
+    font-size: 9px;
+  }
+
+  .change-card__buttons {
+    width: 260px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+  }
+
+  .change-card__buttons button {
+    width: 100%;
+    font-size: 10px;
+    margin-bottom: 4px;
   }
 }

@@ -16,3 +16,10 @@
     max-width: 740px;
   }
 }
+
+@media (max-width: 776px) {
+  #root {
+    width: 370px;
+    padding: 10px;
+  }
+}

@@ -123,3 +123,46 @@
     width: 229px;
   }
 }
+
+@media (max-width: 776px) {
+  .news-list__logo {
+    max-width: 21px;
+  }
+
+  .news-list__header {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .news-list__nav {
+    display: block;
+    height: 70px;
+    margin: 0;
+  }
+
+  .news-list__nav--search {
+    width: 100%;
+    height: 25px;
+    margin-bottom: 7px;
+  }
+
+  .news-list__nav--create-news {
+    height: 25px;
+  }
+
+  .news-list__nav--search input {
+    font-size: 12px;
+  }
+
+  .news-list__nav--search button {
+    font-size: 12px;
+  }
+
+  .news-list__nav--create-news {
+    width: 350px;
+  }
+
+  .news-list__nav--create-news button {
+    font-size: 12px;
+  }
+}

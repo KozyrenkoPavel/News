@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
-import { addNews, updateNews } from "../api/newsApi";
-import { TNews } from "../types/typesNews";
-import { useAppDispatch, useAppSelector } from "../store";
+import { useEffect, useState } from 'react';
+import { addNews, updateNews } from '../api/newsApi';
+import { TNews, TStyleBody } from '../types/typesNews';
+import { useAppDispatch, useAppSelector } from '../store';
 import {
   fetchGetNews,
   selectIsOpenAddNews,
   selectIsOpenChangeNews,
   setIsOpenAddNews,
   setIsOpenChangeNews,
-} from "../store/newsSlice";
-import "./CardChangeNews.css";
+} from '../store/newsSlice';
+import './CardChangeNews.css';
 
 type TPops = {
   news?: TNews;
 };
 
 function CardChangeNews({ news }: TPops) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [link, setLink] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState('');
+  const [link, setLink] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -34,7 +34,7 @@ function CardChangeNews({ news }: TPops) {
       link,
     };
 
-    if (link.includes("https")) await addNews(dataNews);
+    if (link.includes('https')) await addNews(dataNews);
 
     dispatch(fetchGetNews());
     dispatch(setIsOpenAddNews(false));
@@ -57,6 +57,11 @@ function CardChangeNews({ news }: TPops) {
     dispatch(setIsOpenChangeNews(false));
   };
 
+  const setStyleModalBackground = (): TStyleBody => {
+    if (isOpenAddNews || isOpenChangeNews) return { filter: 'none' };
+    else return { filter: 'blur(3px)' };
+  };
+
   useEffect(() => {
     if (news?._id) {
       setTitle(news?.title);
@@ -64,10 +69,10 @@ function CardChangeNews({ news }: TPops) {
       setImage(news?.image);
       setLink(news?.link);
     }
-  }, []);
+  }, [news]);
 
   return (
-    <div className="change-card">
+    <div className="change-card" style={setStyleModalBackground()}>
       {isOpenAddNews && <header>Публикация новости</header>}
       {isOpenChangeNews && <header>Редактирование новости</header>}
 

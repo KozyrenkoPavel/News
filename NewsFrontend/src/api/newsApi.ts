@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { TNews } from '../types/typesNews';
 
-const API_URL = 'http://localhost:5000/api/news';
+const API_URL = 'http://46.160.59.24:5000/api/news';
 
 export const getNews = async () => {
   const response = await axios.get<TNews[]>(API_URL);

@@ -1,6 +1,6 @@
-import "./App.css";
+import './App.css';
 
-import NewsList from "./Components/NewsList";
+import NewsList from './Components/NewsList';
 
 function App() {
   // window.localStorage.clear();

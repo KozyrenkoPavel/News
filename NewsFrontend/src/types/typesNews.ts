@@ -5,3 +5,7 @@ export type TNews = {
   image: string;
   link: string;
 };
+
+export type TStyleBody = {
+  filter: string;
+};
