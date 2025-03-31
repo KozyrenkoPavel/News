@@ -9,9 +9,10 @@
   #root {
     max-width: 885px;
   }
+}
 
-  .card-news {
-    width: 100%;
-    margin-bottom: 50px;
+@media (max-width: 889px) {
+  #root {
+    max-width: 740px;
   }
 }

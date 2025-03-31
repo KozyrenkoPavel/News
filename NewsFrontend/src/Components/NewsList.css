@@ -101,3 +101,25 @@
     font-size: 16px;
   }
 }
+
+@media (max-width: 889px) {
+  .news-list__nav--search {
+    width: 64%;
+  }
+
+  .news-list__logo {
+    max-width: 45px;
+  }
+
+  .news-list__header {
+    font-size: 32px;
+  }
+
+  .news-list__nav--search button {
+    width: 20%;
+  }
+
+  .news-list__nav--create-news {
+    width: 229px;
+  }
+}

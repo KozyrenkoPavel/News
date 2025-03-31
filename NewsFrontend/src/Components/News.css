@@ -84,7 +84,6 @@
   .card-news {
     width: 100%;
     margin-bottom: 50px;
-    /* flex-direction: unset; */
   }
 
   .card-news__content {
